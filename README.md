@@ -11,7 +11,7 @@ python3 -m venv venv && source venv/bin/activate && pip install --upgrade pip &&
 
 ```bash
 
-python -m venv venv;  .\venv/Scripts/Activate.ps1; python -m pip install -- upgrade pip; pip install -r requirements.txt
+python -m venv venv;  .\venv\Scripts\Activate.ps1; python -m pip install -- upgrade pip; pip install -r requirements.txt
 
 ```
 
