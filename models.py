@@ -21,6 +21,12 @@ class User(Base):
 
     results: Mapped[list["MathResult"]] = relationship("MathResult", back_populates="user")
 
+    def __repr__(self) -> str:
+        return (
+            f"User(id={self.id!r}, name={self.name!r}, email={self.email!r}, "
+            f"results_count={len(self.results) if self.results is not None else 0})"
+        )
+
 
 class MathResult(Base):
     __tablename__ = "math_results"
@@ -34,3 +40,11 @@ class MathResult(Base):
     timestamp: Mapped[dt]
 
     user: Mapped["User"] = relationship("User", back_populates="results")
+
+    def __repr__(self) -> str:
+        return (
+            f"MathResult(id={self.id!r}, user_id={self.user_id!r}, question={self.question!r}, "
+            f"user_answer={self.user_answer!r}, correct_answer={self.correct_answer!r}, "
+            f"feedback={self.feedback!r}, timestamp={self.timestamp!r})"
+        )
+
