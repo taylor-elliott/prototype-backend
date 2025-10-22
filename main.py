@@ -1,0 +1,37 @@
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+
+from sqlalchemy.orm import Session
+
+import joblib
+
+import models
+import schemas
+import crud
+import database
+
+models.Base.metadata.create_all(bind=database.engine)
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+
+model = joblib.load("models/feedback_model.joblib")
+
+@app.post("/submit", response_model=schemas.MathResultOut)
+def submit_result(data: schemas.MathResultCreate, db: Session = Depends(database.get_db)):
+    x = [[data.user_answer, data.correct_answer]]
+    feedback = model.predict(x)[0]
+    res = crud.create_result(db, data, feedback)
+    return res
+
+@app.get("/history/{user_id}", response_model=list[schemas.MathResultOut])
+def get_history(user_id: int, db: Session = Depends(database.get_db)):
+    res = crud.get_user_results(db, user_id)
+    return res
