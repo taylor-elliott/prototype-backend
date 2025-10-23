@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 
@@ -21,11 +21,16 @@ class MathResultOut(MathResultBase):
     class Config:
         from_attributes = True
 
+class QuestionOut(BaseModel):
+    question: str
+    type: str
+    topic: str
+    correct_answer: float
 
 class UserCreate(BaseModel):
     name: str
-    email: str
-
+    email: EmailStr
+    password: str
 
 class UserOut(BaseModel):
     id: int
