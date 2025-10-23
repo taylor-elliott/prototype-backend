@@ -1,12 +1,10 @@
 from database import SessionLocal, engine
 from models import Base, User, MathResult, Modules, Question
 
-# Create tables
 Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
 
-# --- Step 1: Seed modules ---
 modules = [
     Modules(name="Addition"),
     Modules(name="Subtraction"),
@@ -19,11 +17,10 @@ db.commit()
 modules_in_db = db.query(Modules).all()
 module_map = {m.name: m.id for m in modules_in_db}
 
-# --- Step 2: Seed users ---
 users = [
-    User(name="Taylor", email="taylor@uoguelph.com", hashed_password="hashed_pw_1"),
-    User(name="Elliott", email="elliott@uoguelph.com", hashed_password="hashed_pw_2"),
-    User(name="Douglas", email="douglas@uoguelph.com", hashed_password="hashed_pw_3"),
+    User(name="Taylor", email="taylor@uoguelph.com", hashed_password="$2b$12$ACVe.7AlQbxNC4hhiZbIIOybT/9d8zbJ2XSeLv37p3hk.nAHG7Gsq"),
+    User(name="Elliott", email="elliott@uoguelph.com", hashed_password="$2b$12$ACVe.7AlQbxNC4hhiZbIIOybT/9d8zbJ2XSeLv37p3hk.nAHG7Gsq"),
+    User(name="Douglas", email="douglas@uoguelph.com", hashed_password="$2b$12$ACVe.7AlQbxNC4hhiZbIIOybT/9d8zbJ2XSeLv37p3hk.nAHG7Gsq"),
 ]
 db.add_all(users)
 db.commit()
@@ -31,7 +28,6 @@ db.commit()
 users_in_db = db.query(User).all()
 user_map = {u.name: u.id for u in users_in_db}
 
-# --- Step 3: Seed questions ---
 questions = [
     Question(
         user_id=user_map["Taylor"],
@@ -94,7 +90,7 @@ db.commit()
 questions_in_db = db.query(Question).all()
 question_map = {q.question: q.id for q in questions_in_db}
 
-# --- Step 4: Seed math results (normalized) ---
+# (normalized)
 results = [
     MathResult(
         user_id=user_map["Taylor"],
